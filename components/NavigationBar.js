@@ -3,8 +3,10 @@ import Link from 'next/link'
 export default function Navbar() {
   return (
     <nav style={{
-      backgroundColor: 'rgba(248, 42, 214, 0.8)',
+      backgroundColor: 'rgba(255, 255, 255, 0.1)',
       backdropFilter: 'blur(10px)',
+      color: 'black',
+      
       WebkitBackdropFilter: 'blur(10px)',
       padding: '15px',
       position: 'sticky',

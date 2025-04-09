@@ -14,14 +14,14 @@ export default function Home() {
         position: 'fixed',
         top: 0,
         left: 0,
-        width: '100vw',
-        height: '100vh',
+        width: '100%',
+        height: '100%',
         backgroundImage: 'url("/background.jpg")',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         zIndex: -1,
-        filter: 'brightness(70%)'
+        filter: 'brightness(65%)'
       }} />
 
       <Navbar />
@@ -30,14 +30,14 @@ export default function Home() {
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
         justifyContent: 'center',
-        padding: '40px',
+        padding: '0px',
         textAlign: 'center',
         color: 'white'
+
       }}>
-        <h1 style={{ fontSize: '3rem', marginBottom: '10px' }}>Recipe Finder</h1>
-        <p style={{ fontSize: '1.2rem' }}>Never Wonder What To Cook 🍽️</p>
+        <h1 style={{ fontSize: '7rem', marginBottom: '20px' }}>Dish-covery</h1>
+        <p style={{ fontSize: '2rem' }}>Find the perfect meal or cocktail for you</p>
       </div>
 
       <Footer />
