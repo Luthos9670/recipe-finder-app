@@ -1,3 +1,4 @@
+//Api page searchs through api with ingrediant user puts in and returns the information listed
 export const fetchMeals = async (ingredient) => {
     try {
       const response = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${ingredient}`)
@@ -7,14 +8,14 @@ export const fetchMeals = async (ingredient) => {
         return data.meals.map((meal) => ({
           id: meal.idMeal,
           name: meal.strMeal,
-          description: 'Click to learn more!',
+          description: 'Click For Recipe',
           image: meal.strMealThumb,
         }))
       } else {
         return []
       }
     } catch (error) {
-      console.error('Meal API error:', error)
+      console.error('API Error:', error)
       return []
     }
   }

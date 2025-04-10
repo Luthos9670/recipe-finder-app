@@ -1,8 +1,7 @@
-import Navbar from '../components/NavigationBar'
-import Footer from '../components/Footer'
-
+import Layout from '../components/Layout'
 export default function Home() {
   return (
+    //the main wrapper for the whole page
     <div style={{
       position: 'relative',
       minHeight: '100vh',
@@ -10,7 +9,9 @@ export default function Home() {
       display: 'flex',
       flexDirection: 'column'
     }}>
+      
       <div style={{
+        //styles the background image, makes it not to bright to overpower the text  and makes it fit to any size screen
         position: 'fixed',
         top: 0,
         left: 0,
@@ -25,8 +26,9 @@ export default function Home() {
       }} />
 
       <Navbar />
-
+      
       <div style={{
+        //styles the main page text and aligns it in the page
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
@@ -34,12 +36,12 @@ export default function Home() {
         padding: '0px',
         textAlign: 'center',
         color: 'white'
-
       }}>
+
         <h1 style={{ fontSize: '7rem', marginBottom: '20px' }}>Dish-covery</h1>
         <p style={{ fontSize: '2rem' }}>Find the perfect meal or cocktail for you</p>
-      </div>
 
+      </div>
       <Footer />
     </div>
   )

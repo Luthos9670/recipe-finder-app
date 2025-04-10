@@ -1,22 +1,41 @@
-export default function RecipeCard({ recipe }) {
-    return (
-      <div style={{
-        width: '280px',
-        margin: '10px',
-        padding: '15px',
-        backgroundColor: '#fff',
-        borderRadius: '10px',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-        textAlign: 'center'
-      }}>
-        <img
-          src={recipe.image}
-          alt={recipe.name}
-          style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '10px' }}
-        />
-        <h3 style={{ margin: '10px 0 5px' }}>{recipe.name}</h3>
-        <p>{recipe.description}</p>
-      </div>
-    )
+import Link from 'next/link'
+import styled from 'styled-components'
+
+const Card = styled.div`
+  width: 280px;
+  margin: 10px;
+  padding: 15px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  cursor: pointer;
+  color: 'black';
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.02);
   }
-  
+`
+
+const Image = styled.img`
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+`
+
+export default function RecipeCard({ recipe, type }) {
+  const { id, name, description, image } = recipe
+
+  return (
+    <Link href={`/${type}/${id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+      <Card>
+        <Image src={image} alt={name} />
+        <h3>{name}</h3>
+        <p>{description}</p>
+      </Card>
+    </Link>
+  )
+}
+
