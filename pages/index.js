@@ -1,7 +1,9 @@
 import Layout from '../components/Layout'
+
+
 export default function Home() {
   return (
-    //the main wrapper for the whole page
+    <Layout>
     <div style={{
       position: 'relative',
       minHeight: '100vh',
@@ -24,8 +26,6 @@ export default function Home() {
         zIndex: -1,
         filter: 'brightness(65%)'
       }} />
-
-      <Navbar />
       
       <div style={{
         //styles the main page text and aligns it in the page
@@ -42,7 +42,7 @@ export default function Home() {
         <p style={{ fontSize: '2rem' }}>Find the perfect meal or cocktail for you</p>
 
       </div>
-      <Footer />
     </div>
+    </Layout>
   )
 }
