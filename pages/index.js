@@ -6,7 +6,7 @@ export default function Home() {
     <Layout>
     <div style={{
       position: 'relative',
-      minHeight: '100vh',
+      minHeight: '80vh',
       overflow: 'hidden',
       display: 'flex',
       flexDirection: 'column'

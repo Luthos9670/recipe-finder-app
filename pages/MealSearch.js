@@ -5,15 +5,14 @@ import { fetchMeals } from '../utils/api'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 
-
-//Wraps the stuff under navbar
-const Rapper = styled.div`
+// 💠 Styled Components
+const PageWrapper = styled.div`
   padding: 60px 20px 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
 `
-//Puts the search bar and button in thew middle of the page
+
 const SearchRow = styled.div`
   display: flex;
   flex-direction: row;
@@ -23,7 +22,7 @@ const SearchRow = styled.div`
   margin-bottom: 30px;
   flex-wrap: wrap;
 `
-//Makes the recipes appear 3 in a row
+
 const RecipeGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -32,7 +31,7 @@ const RecipeGrid = styled.div`
   max-width: 1000px;
   margin-top: 20px;
 `
-//Makes the users input into the search bar styled
+
 const Input = styled.input`
   padding: 10px;
   width: 250px;
@@ -40,7 +39,7 @@ const Input = styled.input`
   border: 1px solid #ccc;
   font-size: 1rem;
 `
-//Styles the search button and gives it its hover effect
+
 const Button = styled.button`
   padding: 10px 20px;
   border-radius: 5px;
@@ -58,22 +57,28 @@ const Button = styled.button`
 `
 
 export default function MealSearch() {
-  const [query, setQuery] = useState('')
-  const [recipes, setRecipes] = useState([])
+  const [ingredient, setIngredient] = useState('')
+  const [mealResults, setMealResults] = useState([])
+  const [noResultsMessage, setNoResultsMessage] = useState('')
 
-  //calls api usinging the search term the user put in
   const handleSearch = async () => {
-    const results = await fetchMeals(query)
-    setRecipes(results)
+    const results = await fetchMeals(ingredient)
+    setMealResults(results)
+
+    if (results.length === 0) {
+      setNoResultsMessage(`No results found for "${ingredient}"`)
+    } else {
+      setNoResultsMessage('')
+    }
   }
 
   return (
-    //styling for the background
     <div style={{
       position: 'relative',
       minHeight: '100vh',
       overflow: 'hidden',
     }}>
+      {/* 🌅 Background image */}
       <div style={{
         position: 'fixed',
         top: 0,
@@ -87,8 +92,9 @@ export default function MealSearch() {
         filter: 'brightness(70%)',
         zIndex: -1,
       }} />
+
       <Layout>
-        <Rapper>
+        <PageWrapper>
           <h1 style={{ textAlign: 'center', color: 'white', textShadow: '0 0 5px black' }}>
             Search Meals
           </h1>
@@ -97,18 +103,28 @@ export default function MealSearch() {
             <Input
               type="text"
               placeholder="Enter ingredient"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              value={ingredient}
+              onChange={(e) => setIngredient(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleSearch();
+                }
+              }}
             />
             <Button onClick={handleSearch}>Search</Button>
           </SearchRow>
 
+
+
+          {/*Show message if no results */}
+          {noResultsMessage && (
+            <p style={{ color: 'white', marginBottom: '10px' }}>{noResultsMessage}</p>
+          )}
+
+          {/*Fading recipe cards */}
           <RecipeGrid>
-            {recipes.map((recipe, index) => (
+            {mealResults.map((recipe, index) => (
               <motion.div
-              //the animation to make the recipes fade in as you scroll
-              //edit: the recipes wernt loading in right away so i had to make the first 3 appear right away 
-              //will have to work on making it so more appear on the screen
                 key={recipe.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={index < 3 ? { opacity: 1, y: 0 } : undefined}
@@ -120,7 +136,7 @@ export default function MealSearch() {
               </motion.div>
             ))}
           </RecipeGrid>
-        </Rapper>
+        </PageWrapper>
       </Layout>
     </div>
   )

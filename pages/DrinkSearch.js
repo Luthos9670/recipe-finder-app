@@ -5,12 +5,15 @@ import { fetchDrinks } from '../utils/api'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 
+// Wrapper for the page content
 const PageWrapper = styled.div`
   padding: 60px 20px 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
 `
+
+// Search bar + button row
 const SearchRow = styled.div`
   display: flex;
   flex-direction: row;
@@ -20,6 +23,8 @@ const SearchRow = styled.div`
   margin-bottom: 30px;
   flex-wrap: wrap;
 `
+
+// Grid layout for recipe cards
 const RecipeGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -36,10 +41,11 @@ const Input = styled.input`
   border: 1px solid #ccc;
   font-size: 1rem;
 `
+
 const Button = styled.button`
   padding: 10px 20px;
   border-radius: 5px;
-  background-color: #8e44ad;
+  background-color: #f4b400;
   border: none;
   color: white;
   font-weight: bold;
@@ -48,16 +54,24 @@ const Button = styled.button`
   transition: background 0.3s ease;
 
   &:hover {
-    background-color: #732d91;
+    background-color: #e09e00;
   }
 `
+
 export default function DrinkSearch() {
-  const [query, setQuery] = useState('')
-  const [drinks, setDrinks] = useState([])
+  const [ingredient, setIngredient] = useState('')
+  const [drinkResults, setDrinkResults] = useState([])
+  const [noResultsMessage, setNoResultsMessage] = useState('')
 
   const handleSearch = async () => {
-    const results = await fetchDrinks(query)
-    setDrinks(results)
+    const results = await fetchDrinks(ingredient)
+    setDrinkResults(results)
+
+    if (results.length === 0) {
+      setNoResultsMessage(`No drinks found with "${ingredient}"`)
+    } else {
+      setNoResultsMessage('')
+    }
   }
 
   return (
@@ -66,6 +80,7 @@ export default function DrinkSearch() {
       minHeight: '100vh',
       overflow: 'hidden',
     }}>
+      {/* 🌅 Background image */}
       <div style={{
         position: 'fixed',
         top: 0,
@@ -79,6 +94,7 @@ export default function DrinkSearch() {
         filter: 'brightness(70%)',
         zIndex: -1,
       }} />
+
       <Layout>
         <PageWrapper>
           <h1 style={{ textAlign: 'center', color: 'white', textShadow: '0 0 5px black' }}>
@@ -89,23 +105,32 @@ export default function DrinkSearch() {
             <Input
               type="text"
               placeholder="Enter ingredient"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              value={ingredient}
+              onChange={(e) => setIngredient(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleSearch()
+                }
+              }}
             />
             <Button onClick={handleSearch}>Search</Button>
           </SearchRow>
 
+          {noResultsMessage && (
+            <p style={{ color: 'white', marginBottom: '10px' }}>{noResultsMessage}</p>
+          )}
+
           <RecipeGrid>
-            {drinks.map((drink, index) => (
+            {drinkResults.map((recipe, index) => (
               <motion.div
-                key={drink.id}
+                key={recipe.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={index < 3 ? { opacity: 1, y: 0 } : undefined}
                 whileInView={index >= 3 ? { opacity: 1, y: 0 } : undefined}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
               >
-                <RecipeCard recipe={drink} type="Drink" />
+                <RecipeCard recipe={recipe} type="Drink" />
               </motion.div>
             ))}
           </RecipeGrid>

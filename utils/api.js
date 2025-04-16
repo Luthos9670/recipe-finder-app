@@ -20,28 +20,30 @@ export const fetchMeals = async (ingredient) => {
     }
   }
 
- export const fetchDrinks = async (ingredient) => {
-  try {
-    const cleanQuery = ingredient.trim().toLowerCase() // removes spaces, fixes casing
-
-    const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${cleanQuery}`)
-    const data = await response.json()
-
-    if (data.drinks) {
-      return data.drinks.map((drink) => ({
-        id: drink.idDrink,
-        name: drink.strDrink,
-        description: 'Click to learn more!',
-        image: drink.strDrinkThumb,
-      }))
-    } else {
+  export const fetchDrinks = async (ingredient) => {
+    try {
+      const cleanQuery = ingredient.trim().toLowerCase()
+      const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${cleanQuery}`)
+      const data = await response.json()
+  
+      // ✅ Make sure it's a valid array before mapping
+      if (Array.isArray(data.drinks)) {
+        return data.drinks.map((drink) => ({
+          id: drink.idDrink,
+          name: drink.strDrink,
+          description: 'Click to learn more!',
+          image: drink.strDrinkThumb,
+        }))
+      } else {
+        // No drinks found or invalid response
+        return []
+      }
+    } catch (error) {
+      console.error('Drink API error:', error)
       return []
     }
-  } catch (error) {
-    console.error('Drink API error:', error)
-    return []
   }
-}
+  
 
   
   
