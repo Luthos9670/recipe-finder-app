@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import Layout from '../../components/Layout'
 import styled from 'styled-components'
 
+// layout stuff for spacing + background
 const OverlayWrapper = styled.div`
   position: relative;
   min-height: 100vh;
@@ -82,19 +83,23 @@ const Instructions = styled.p`
 
 export default function DrinkDetail() {
   const router = useRouter()
-  const { id } = router.query
+  const { id } = router.query // we grab the id from the url so we can fetch that specific drink
+
   const [drink, setDrink] = useState(null)
 
+  // runs when the page loads or when the id changes
   useEffect(() => {
     if (id) {
       fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`)
         .then((res) => res.json())
         .then((data) => {
+          // if drink exists we set it, if not we just leave it null
           setDrink(data.drinks ? data.drinks[0] : null)
         })
     }
   }, [id])
 
+  // if the drink wasn’t found we just say that instead of showing an empty page
   if (!drink) {
     return (
       <OverlayWrapper>
@@ -124,6 +129,9 @@ export default function DrinkDetail() {
               {Array.from({ length: 15 }).map((_, i) => {
                 const ingredient = drink[`strIngredient${i + 1}`]
                 const measure = drink[`strMeasure${i + 1}`]
+
+                // api doesn’t give ingredients in an array, so we gotta loop manually
+                // only show stuff if the ingredient exists and isn’t empty
                 return (
                   ingredient &&
                   ingredient.trim() !== '' && (

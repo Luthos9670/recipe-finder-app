@@ -5,7 +5,7 @@ import { fetchMeals } from '../utils/api'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 
-// 💠 Styled Components
+// page layout
 const PageWrapper = styled.div`
   padding: 60px 20px 40px;
   display: flex;
@@ -13,6 +13,7 @@ const PageWrapper = styled.div`
   align-items: center;
 `
 
+// input and button side by side
 const SearchRow = styled.div`
   display: flex;
   flex-direction: row;
@@ -23,6 +24,7 @@ const SearchRow = styled.div`
   flex-wrap: wrap;
 `
 
+// grid for the recipe cards
 const RecipeGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -57,14 +59,15 @@ const Button = styled.button`
 `
 
 export default function MealSearch() {
-  const [ingredient, setIngredient] = useState('')
-  const [mealResults, setMealResults] = useState([])
-  const [noResultsMessage, setNoResultsMessage] = useState('')
+  const [ingredient, setIngredient] = useState('') // what the user types
+  const [mealResults, setMealResults] = useState([]) // search results
+  const [noResultsMessage, setNoResultsMessage] = useState('') // msg if nothing found
 
   const handleSearch = async () => {
     const results = await fetchMeals(ingredient)
     setMealResults(results)
 
+    // show msg if nothing comes back
     if (results.length === 0) {
       setNoResultsMessage(`No results found for "${ingredient}"`)
     } else {
@@ -78,7 +81,7 @@ export default function MealSearch() {
       minHeight: '100vh',
       overflow: 'hidden',
     }}>
-      {/* 🌅 Background image */}
+      {/* background image behind everything */}
       <div style={{
         position: 'fixed',
         top: 0,
@@ -99,6 +102,7 @@ export default function MealSearch() {
             Search Meals
           </h1>
 
+          {/* input + button */}
           <SearchRow>
             <Input
               type="text"
@@ -107,28 +111,26 @@ export default function MealSearch() {
               onChange={(e) => setIngredient(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
-                  handleSearch();
+                  handleSearch()
                 }
               }}
             />
             <Button onClick={handleSearch}>Search</Button>
           </SearchRow>
 
-
-
-          {/*Show message if no results */}
+          {/* if there's no result show this */}
           {noResultsMessage && (
             <p style={{ color: 'white', marginBottom: '10px' }}>{noResultsMessage}</p>
           )}
 
-          {/*Fading recipe cards */}
+          {/* show recipes and fade them in */}
           <RecipeGrid>
             {mealResults.map((recipe, index) => (
               <motion.div
                 key={recipe.id}
                 initial={{ opacity: 0, y: 20 }}
-                animate={index < 3 ? { opacity: 1, y: 0 } : undefined}
-                whileInView={index >= 3 ? { opacity: 1, y: 0 } : undefined}
+                animate={index < 3 ? { opacity: 1, y: 0 } : undefined} // load first few right away
+                whileInView={index >= 3 ? { opacity: 1, y: 0 } : undefined} // others fade in as you scroll
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
               >

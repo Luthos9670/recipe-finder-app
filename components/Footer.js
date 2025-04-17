@@ -9,7 +9,7 @@ export default function Footer() {
       color: '#000',
       zIndex: 10
     }}>
-      <p>©Lucas Pinto & Paul Rubio — Uses TheMealDB </p>
+      <p>©Lucas Pinto & Paul Rubio — Using TheMealDB & thecocktaildb </p>
     </footer>
   )
 }

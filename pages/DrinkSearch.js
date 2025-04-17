@@ -5,7 +5,7 @@ import { fetchDrinks } from '../utils/api'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 
-// Wrapper for the page content
+// page layout
 const PageWrapper = styled.div`
   padding: 60px 20px 40px;
   display: flex;
@@ -13,7 +13,7 @@ const PageWrapper = styled.div`
   align-items: center;
 `
 
-// Search bar + button row
+// input and button row
 const SearchRow = styled.div`
   display: flex;
   flex-direction: row;
@@ -24,7 +24,7 @@ const SearchRow = styled.div`
   flex-wrap: wrap;
 `
 
-// Grid layout for recipe cards
+// grid for the results
 const RecipeGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -59,14 +59,15 @@ const Button = styled.button`
 `
 
 export default function DrinkSearch() {
-  const [ingredient, setIngredient] = useState('')
-  const [drinkResults, setDrinkResults] = useState([])
-  const [noResultsMessage, setNoResultsMessage] = useState('')
+  const [ingredient, setIngredient] = useState('') // what user types
+  const [drinkResults, setDrinkResults] = useState([]) // the drink cards
+  const [noResultsMessage, setNoResultsMessage] = useState('') // msg if nothing comes back
 
   const handleSearch = async () => {
     const results = await fetchDrinks(ingredient)
     setDrinkResults(results)
 
+    // show msg if nothing was found
     if (results.length === 0) {
       setNoResultsMessage(`No drinks found with "${ingredient}"`)
     } else {
@@ -80,7 +81,7 @@ export default function DrinkSearch() {
       minHeight: '100vh',
       overflow: 'hidden',
     }}>
-      {/* 🌅 Background image */}
+      {/* background image behind everything */}
       <div style={{
         position: 'fixed',
         top: 0,
@@ -101,6 +102,7 @@ export default function DrinkSearch() {
             Search Drinks
           </h1>
 
+          {/* search bar + button */}
           <SearchRow>
             <Input
               type="text"
@@ -116,10 +118,12 @@ export default function DrinkSearch() {
             <Button onClick={handleSearch}>Search</Button>
           </SearchRow>
 
+          {/* show msg if nothing was found */}
           {noResultsMessage && (
             <p style={{ color: 'white', marginBottom: '10px' }}>{noResultsMessage}</p>
           )}
 
+          {/* show drink cards with fade in */}
           <RecipeGrid>
             {drinkResults.map((recipe, index) => (
               <motion.div

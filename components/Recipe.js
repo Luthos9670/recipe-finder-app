@@ -1,38 +1,40 @@
 import styled from 'styled-components'
 import Link from 'next/link'
 
+// the whole card box
 const Card = styled.div`
-  background-color: white;
-  border-radius: 12px;
+  background: #fff;
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
-  text-align: left;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
 
   &:hover {
-    transform: translateY(-4px);
+    transform: scale(1.02);
   }
 `
 
-const Image = styled.img`
+// recipe image
+const Img = styled.img`
   width: 100%;
-  height: 200px;
+  height: 180px;
   object-fit: cover;
 `
 
-const Content = styled.div`
-  padding: 16px;
+// holds the text stuff
+const Info = styled.div`
+  padding: 12px 16px;
 `
 
 const Title = styled.h3`
-  font-size: 1.2rem;
-  color: #333;
-  margin: 0 0 8px;
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+  color: #222;
 `
 
-const Description = styled.p`
-  font-size: 0.95rem;
-  color: #777;
+const Desc = styled.p`
+  font-size: 0.9rem;
+  color: #666;
   margin: 0;
 `
 
@@ -40,14 +42,19 @@ export default function RecipeCard({ recipe, type }) {
   const { id, name, description, image } = recipe
 
   return (
-    <Link href={`/${type}/${id}`} style={{ textDecoration: 'none' }}>
-      <Card>
-        <Image src={image} alt={name} />
-        <Content>
-          <Title>{name}</Title>
-          <Description>{description}</Description>
-        </Content>
-      </Card>
+    // link sends you to the detail page for that meal or drink based on the id
+    <Link href={`/${type}/${id}`} passHref legacyBehavior>
+      <a style={{ textDecoration: 'none' }}>
+        <Card>
+          {/* show image or fallback if image missing */}
+          <Img src={image || '/placeholder.jpg'} alt={name} />
+          <Info>
+            <Title>{name}</Title>
+            {/* just shows a default msg if no description is passed */}
+            <Desc>{description || 'No description available.'}</Desc>
+          </Info>
+        </Card>
+      </a>
     </Link>
   )
 }

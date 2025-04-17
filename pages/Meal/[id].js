@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import Layout from '../../components/Layout'
 import styled from 'styled-components'
 
+// layout + background
 const OverlayWrapper = styled.div`
   position: relative;
   min-height: 100vh;
@@ -82,19 +83,23 @@ const Instructions = styled.p`
 
 export default function MealDetail() {
   const router = useRouter()
-  const { id } = router.query
+  const { id } = router.query // grabs the meal id from the url
+
   const [meal, setMeal] = useState(null)
 
+  // runs when the page loads or when the id changes (like someone clicks a diff meal)
   useEffect(() => {
     if (id) {
       fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`)
         .then((res) => res.json())
         .then((data) => {
+          // set the meal if it exists
           setMeal(data.meals ? data.meals[0] : null)
         })
     }
   }, [id])
 
+  // if no meal data we just show a not found message
   if (!meal) {
     return (
       <OverlayWrapper>
@@ -121,9 +126,12 @@ export default function MealDetail() {
 
             <SectionTitle>Ingredients</SectionTitle>
             <IngredientsList>
+              {/* we gotta loop from 1 to 20 since the api gives ingredients like strIngredient1, strIngredient2, etc */}
               {Array.from({ length: 20 }).map((_, i) => {
                 const ingredient = meal[`strIngredient${i + 1}`]
                 const measure = meal[`strMeasure${i + 1}`]
+
+                // only show it if the ingredient actually has a value (some are blank)
                 return (
                   ingredient &&
                   ingredient.trim() !== '' && (
